@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 
 export default function Price (props) {
-    const apiKey = '5B79C730-80AD-4EAF-ADEE-7BDD608C413B';
+    const apiKey = process.env.REACT_APP_API_KEY;
     
     // Grabbing the Currency symbol from the URL Params
     const { symbol } = useParams();
@@ -13,6 +13,7 @@ export default function Price (props) {
 
   // State to hold the coin data
   const [coin, setCoin] = useState(null);
+  const [refresh, setRefresh] = useState(false);
 
   // Function to fetch the coin data
   const getCoin = async () => {
@@ -27,7 +28,11 @@ export default function Price (props) {
 
   useEffect(() => {
     getCoin()
-  },  [])
+  },  [refresh])
+
+  const handleClick = () => {
+    setRefresh(!refresh);
+  }
 
   // Loaded function for when data is fetched
   const loaded = () => {
@@ -39,6 +44,8 @@ export default function Price (props) {
             <h2>
                 {coin.rate}
             </h2>
+            <br />
+            <button onClick={handleClick}>Refresh</button>
         </div>
     )
   }
